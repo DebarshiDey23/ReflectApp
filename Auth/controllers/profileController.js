@@ -1,5 +1,28 @@
 const User = require('../models/userModel');
 
+
+const addMessagetoUser = async (userID, messageContent, sender) => {
+  try {
+    const user = await User.findById(userID);
+    if (!user) {
+      throw new Error("Couldn't find User")
+    }
+
+    const message = {
+      content: messageContent,
+      sender: sender,
+    }
+
+    user.messages.push(message)
+    await user.save();
+
+    return user;
+  } catch (error) {
+    throw new Error(error.message());
+  }
+
+}
+
 const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -82,4 +105,5 @@ module.exports = {
   updateFirstName,
   updateLastName,
   updateUsername,
+  addMessagetoUser
 };
