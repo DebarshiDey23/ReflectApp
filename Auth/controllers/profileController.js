@@ -9,6 +9,30 @@ const getProfile = async (req, res) => {
   }
 };
 
+const updateFirstName = async (req, res) => {
+  const { firstName } = req.body;
+  const userId = req.user.id; // Assuming you have authentication middleware
+
+  try {
+    await User.findByIdAndUpdate(userId, { firstName });
+    res.status(200).json({ message: 'First name updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateLastName = async (req, res) => {
+  const { lastName } = req.body;
+  const userId = req.user.id; // Assuming you have authentication middleware
+
+  try {
+    await User.findByIdAndUpdate(userId, { lastName });
+    res.status(200).json({ message: 'Last name updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const updateUsername = async (req, res) => {
   const { username } = req.body;
 
@@ -54,5 +78,8 @@ module.exports = {
   getProfile,
   updateUsername,
   updateName,
-  updateProfilePicture
+  updateProfilePicture,
+  updateFirstName,
+  updateLastName,
+  updateUsername,
 };
