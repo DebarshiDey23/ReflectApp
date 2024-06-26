@@ -1,20 +1,26 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
+require('dotenv').config(); // Correctly call dotenv.config() as a function
 const authRoutes = require('./routes/authRoutes');
-const profileRoutes = require('./routes/profileRoutes');
-const friendRoutes = require('./routes/friendRoutes');
-
-dotenv.config();
-
-connectDB();
+const promptRoutes = require('./routes/promptRoutes');
+const responseRoutes = require('./routes/responseRoutes');
+const authController = require('./controllers/authController');
 
 const app = express();
 app.use(express.json());
 
+mongoose.connect(process.env.MONGODB_URI, { // Use process.env.MONGODB_URI here
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('MongoDB connected');
+}).catch((err) => {
+  console.error('MongoDB connection error:', err.message);
+});
+
 app.use('/api/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/friends', friendRoutes);
+app.use('/api/prompts', promptRoutes);
+app.use('/api/responses', responseRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
