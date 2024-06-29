@@ -5,6 +5,8 @@ const authRoutes = require('./routes/authRoutes');
 const promptRoutes = require('./routes/promptRoutes');
 const responseRoutes = require('./routes/responseRoutes');
 const authController = require('./controllers/authController');
+const fetchPromptsCron = require('./fetchPromptsCron'); // Add this line
+
 
 const app = express();
 app.use(express.json());
@@ -25,4 +27,5 @@ app.use('/api/responses', responseRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  fetchPromptsCron(); // Start the cron job
 });
