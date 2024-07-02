@@ -1,7 +1,10 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const Prompt = require('../models/Prompt'); // Adjust the path as needed
+const Prompt = require('../models/prompt'); // Adjust the path as needed
 require('dotenv').config();
+const client = axios.create({
+  headers: { 'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY}
+});
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -12,9 +15,14 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error('MongoDB connection error:', err.message);
 });
 
+const params = {
+  "prompt": "Once upon a time", 
+  "max_tokens": 10
+}
+
 const fetchPrompts = async () => {
   try {
-    const response = await axios.post('https://api.openai.com/v1/completions', {
+    const response = await client.post('https://api.openai.com/v1/completions', {
       model: 'text-davinci-003', // or the model you prefer
       prompt: 'Generate a random thought-provoking question.',
       max_tokens: 50,

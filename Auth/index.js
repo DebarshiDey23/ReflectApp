@@ -1,17 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Correctly call dotenv.config() as a function
+require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const promptRoutes = require('./routes/promptRoutes');
 const responseRoutes = require('./routes/responseRoutes');
-const authController = require('./controllers/authController');
-const fetchPromptsCron = require('./fetchPromptsCron'); // Add this line
-
+const feedRoutes = require('./routes/feedRoutes');
+const fetchPromptsCron = require('./fetchPromptsCron');
 
 const app = express();
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI, { // Use process.env.MONGODB_URI here
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
@@ -23,9 +22,10 @@ mongoose.connect(process.env.MONGODB_URI, { // Use process.env.MONGODB_URI here
 app.use('/api/auth', authRoutes);
 app.use('/api/prompts', promptRoutes);
 app.use('/api/responses', responseRoutes);
+app.use('/api/feed', feedRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  fetchPromptsCron(); // Start the cron job
+  fetchPromptsCron(); // Correctly call fetchPromptsCron here
 });

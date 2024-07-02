@@ -1,5 +1,5 @@
 const express = require('express');
-const Prompt = require('../models/Prompt');
+const Prompt = require('../models/prompt');
 const notificationService = require('../notificationService');
 const User = require('../models/userModel'); // Ensure you have a User model
 
